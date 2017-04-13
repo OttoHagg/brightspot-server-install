@@ -1,0 +1,57 @@
+<project name="brightspot-server" basedir="." default="default">
+
+	<target name="init">
+		<echo message="Initializing..." />
+		<property name="template.name" value="brightspot-server" />
+		<property name="template.version" value="1.0.0" />
+		<property name="template.tag" value="https://github.com/OttoHagg/${template.name}/archive/v${template.version}.zip" />
+		<input message="What is your local MySQL user?" addproperty="database.user" defaultvalue="root" />
+		<input message="What is your local MySQL password?" addproperty="database.pass" defaultvalue="" />
+		<input message="What would you like the new MySQL database name to be?" addproperty="database.name" defaultvalue="brightspot" />
+		<input message="What would you like the new Tomcat name to be?" addproperty="server.name" defaultvalue="brightspot" />
+	</target>
+
+	<target name="server" depends="init">
+		<echo message="Setting up server (Tomcat, Solr)..." />
+		<delete dir="${server.name}" />
+		<sleep seconds="2" />
+		<get src="${template.tag}" dest="${basedir}" verbose="false" />
+		<unzip src="v1.0.0.zip" dest="${basedir}"/>
+		<move file="${template.name}-${template.version}" tofile="${server.name}"/>
+		<replaceregexp file="${basedir}/${server.name}/conf/context.xml" match="DATABASE_USER" replace="${database.user}" flags="g" />
+		<replaceregexp file="${basedir}/${server.name}/conf/context.xml" match="DATABASE_PASS" replace="${database.pass}" flags="g" />
+		<replaceregexp file="${basedir}/${server.name}/conf/context.xml" match="DATABASE_NAME" replace="${database.name}" flags="g" />
+		<replaceregexp file="${basedir}/${server.name}/conf/context.xml" match="TOMCAT_PATH" replace="${basedir}/${server.name}" flags="g" />
+		<delete file="v${template.version}.zip" />
+		<echo message="Done." />
+	</target>
+
+	<target name="permissions" depends="server">
+		<echo message="Setting ownership to ${user.name}..." />
+		<chown owner="${user.name}" verbose="true">
+				<fileset dir="${basedir}/${server.name}" />
+				<dirset dir="${basedir}/${server.name}" />
+		</chown>
+		<echo message="Making shell scripts executable..." />
+		<chmod dir="${basedir}/${server.name}/bin" perm="a+x" includes="**/*.sh" verbose="true" />
+		<echo message="Done." />
+	</target>
+
+		<target name="database" depends="permissions">
+			<path id="database.driver.path">
+				<pathelement location="${basedir}/${server.name}/lib/mysql-connector-java-5.0.8-bin.jar" />
+			</path>
+			<echo message="Setting up MySQL..." />
+			<sql driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306" userid="${database.user}" password="${database.pass}" classpathref="database.driver.path" onerror="continue">
+				<transaction>
+					CREATE DATABASE IF NOT EXISTS ${database.name} CHARACTER SET utf8 COLLATE utf8_general_ci;
+				</transaction>
+			</sql>
+			<echo message="Done." />
+		</target>
+
+	<target name="default" depends="database">
+		<echo message="Setup for server ${server.name} is complete." />
+	</target>
+
+</project>
