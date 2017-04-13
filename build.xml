@@ -16,7 +16,7 @@
 		<delete dir="${server.name}" />
 		<sleep seconds="2" />
 		<get src="${template.tag}" dest="${basedir}" verbose="false" />
-		<unzip src="v1.0.0.zip" dest="${basedir}"/>
+		<unzip src="v${template.version}.zip" dest="${basedir}"/>
 		<move file="${template.name}-${template.version}" tofile="${server.name}"/>
 		<replaceregexp file="${basedir}/${server.name}/conf/context.xml" match="DATABASE_USER" replace="${database.user}" flags="g" />
 		<replaceregexp file="${basedir}/${server.name}/conf/context.xml" match="DATABASE_PASS" replace="${database.pass}" flags="g" />
