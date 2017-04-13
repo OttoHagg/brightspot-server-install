@@ -3,7 +3,7 @@
 	<target name="init">
 		<echo message="Initializing..." />
 		<property name="template.name" value="brightspot-server" />
-		<property name="template.version" value="1.0.0" />
+		<property name="template.version" value="1.0.1" />
 		<property name="template.tag" value="https://github.com/OttoHagg/${template.name}/archive/v${template.version}.zip" />
 		<input message="What is your local MySQL user?" addproperty="database.user" defaultvalue="root" />
 		<input message="What is your local MySQL password?" addproperty="database.pass" defaultvalue="" />
@@ -23,7 +23,6 @@
 		<replaceregexp file="${basedir}/${server.name}/conf/context.xml" match="DATABASE_NAME" replace="${database.name}" flags="g" />
 		<replaceregexp file="${basedir}/${server.name}/conf/context.xml" match="TOMCAT_PATH" replace="${basedir}/${server.name}" flags="g" />
 		<delete file="v${template.version}.zip" />
-		<mkdir dir="${basedir}/${server.name}/logs"/>
 		<echo message="Done." />
 	</target>
 
