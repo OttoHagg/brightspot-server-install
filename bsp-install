@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# version configurations
+BSP_SERVER_VERSION="1.0.1"
+
+# set up vars
+TOMCAT_PATH=$(pwd)/brightspot-tomcat
+DATABASE_USER="root"
+DATABASE_PASS=""
+TOMCAT_ZIP="https://github.com/OttoHagg/brightspot-server/archive/v$BSP_SERVER_VERSION.zip"
+
+validateName() {
+    echo -n "Please name your project directory: "
+    read PROJECT_NAME
+}
+
+lineBreak() {
+    printf "\n"
+}
+
+createProject() {
+    mkdir -p ./$PROJECT_NAME
+    echo -n "Git clone URL: "
+    read GIT_URL
+    cd $PROJECT_NAME
+    # Clone in project repo and download, extract, and delete tomcat
+    PROJECT_DIR=$(basename $GIT_URL)-project
+    git clone $GIT_URL $PROJECT_DIR
+    wget -O tomcat.zip $TOMCAT_ZIP
+    unzip ./tomcat.zip
+    rm -rf ./tomcat.zip
+    # create mysql schema
+    mysql -u root -e "CREATE DATABASE IF NOT EXISTS $PROJECT_NAME CHARACTER SET utf8 COLLATE utf8_general_ci;"
+    # update context.xml
+    CONTEXT_FILE="./brightspot-server-$BSP_SERVER_VERSION/conf/context.xml"
+    sed -i '' "s#DATABASE_NAME#$PROJECT_NAME#g" $CONTEXT_FILE
+    sed -i '' "s#DATABASE_USER#$DATABASE_USER#g" $CONTEXT_FILE
+    sed -i '' "s#DATABASE_PASS#$DATABASE_PASS#g" $CONTEXT_FILE
+    sed -i '' "s#TOMCAT_PATH#$TOMCAT_PATH#g" $CONTEXT_FILE
+    #cd $(basename $GIT_URL)
+    cd $PROJECT_DIR
+    # Maven build
+    mvn clean install
+    #link war to root
+    cd ../brightspot-server-$BSP_SERVER_VERSION/webapps
+    ln -sf ../../wgbh.git-project/target/*.war ./ROOT.war
+    # make shell scripts executable
+    cd ../bin
+    chmod a+x *.sh
+    break
+}
+
+start_time=`date +%s`
+echo "Brightspot Installation"
+lineBreak
+while true; do
+    validateName
+    if [[ ! -z $PROJECT_NAME ]]; then
+        createProject
+    else
+        echo "Please enter a valid directory name"
+        lineBreak
+    fi
+done
+lineBreak
+echo "BRIGHTSPOT Server Setup Complete"
+echo "Execution time: $(expr `date +%s` - $start_time)s"
