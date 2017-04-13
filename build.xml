@@ -23,6 +23,7 @@
 		<replaceregexp file="${basedir}/${server.name}/conf/context.xml" match="DATABASE_NAME" replace="${database.name}" flags="g" />
 		<replaceregexp file="${basedir}/${server.name}/conf/context.xml" match="TOMCAT_PATH" replace="${basedir}/${server.name}" flags="g" />
 		<delete file="v${template.version}.zip" />
+		<mkdir dir="${basedir}/${server.name}/logs"/>
 		<echo message="Done." />
 	</target>
 
