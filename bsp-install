@@ -28,16 +28,16 @@ createProject() {
     unzip ./tomcat.zip
     rm -rf ./tomcat.zip
     # create mysql schema
-    mysql -u root -e "CREATE DATABASE IF NOT EXISTS $PROJECT_NAME CHARACTER SET utf8 COLLATE utf8_general_ci;"
+    mysql -u root -e "CREATE DATABASE IF NOT EXISTS ${PROJECT_NAME//[\.-]/} CHARACTER SET utf8 COLLATE utf8_general_ci;"
     # update context.xml
     CONTEXT_FILE="./brightspot-server-$BSP_SERVER_VERSION/conf/context.xml"
-    sed -i '' "s#DATABASE_NAME#$PROJECT_NAME#g" $CONTEXT_FILE
+    sed -i '' "s#DATABASE_NAME#${PROJECT_NAME//[\.-]/}#g" $CONTEXT_FILE
     sed -i '' "s#DATABASE_USER#$DATABASE_USER#g" $CONTEXT_FILE
     sed -i '' "s#DATABASE_PASS#$DATABASE_PASS#g" $CONTEXT_FILE
     sed -i '' "s#TOMCAT_PATH#$(pwd)/brightspot-server-$BSP_SERVER_VERSION#g" $CONTEXT_FILE
-    #cd $(basename $GIT_URL)
     cd $PROJECT_DIR
     # Maven build
+    rm -rf node_modules && yarn cache clean
     mvn clean install
     #link war to root
     cd ../brightspot-server-$BSP_SERVER_VERSION/webapps
@@ -51,7 +51,6 @@ createProject() {
 
 start_time=`date +%s`
 echo "Brightspot Installation"
-lineBreak
 while true; do
     validateName
     if [[ ! -z $PROJECT_NAME ]]; then
