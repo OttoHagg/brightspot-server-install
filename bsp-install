@@ -41,13 +41,13 @@ createProject() {
     mvn clean install
     #link war to root
     cd ../brightspot-server-$BSP_SERVER_VERSION/webapps
-    ln -sf ../../wgbh.git-project/target/*.war ./ROOT.war
+    ln -sf ../../$PROJECT_DIR/target/*.war ./ROOT.war
     # make shell scripts executable
     cd ../bin
     chmod a+x *.sh
     cd ../
     chown -R $USER *
-    break
+
 }
 
 start_time=`date +%s`
