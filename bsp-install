@@ -3,7 +3,6 @@
 BSP_SERVER_VERSION="1.0.1"
 
 # set up vars
-TOMCAT_PATH=$(pwd)/brightspot-tomcat
 DATABASE_USER="root"
 DATABASE_PASS=""
 TOMCAT_ZIP="https://github.com/OttoHagg/brightspot-server/archive/v$BSP_SERVER_VERSION.zip"
@@ -19,7 +18,7 @@ lineBreak() {
 
 createProject() {
     mkdir -p ./$PROJECT_NAME
-    echo -n "Git clone URL: "
+    echo -n "Git Clone URL (HTTPS): "
     read GIT_URL
     cd $PROJECT_NAME
     # Clone in project repo and download, extract, and delete tomcat
@@ -35,7 +34,7 @@ createProject() {
     sed -i '' "s#DATABASE_NAME#$PROJECT_NAME#g" $CONTEXT_FILE
     sed -i '' "s#DATABASE_USER#$DATABASE_USER#g" $CONTEXT_FILE
     sed -i '' "s#DATABASE_PASS#$DATABASE_PASS#g" $CONTEXT_FILE
-    sed -i '' "s#TOMCAT_PATH#$TOMCAT_PATH#g" $CONTEXT_FILE
+    sed -i '' "s#TOMCAT_PATH#$(pwd)/brightspot-server-$BSP_SERVER_VERSION#g" $CONTEXT_FILE
     #cd $(basename $GIT_URL)
     cd $PROJECT_DIR
     # Maven build
@@ -46,6 +45,8 @@ createProject() {
     # make shell scripts executable
     cd ../bin
     chmod a+x *.sh
+    cd ../
+    chown -R $USER *
     break
 }
 
