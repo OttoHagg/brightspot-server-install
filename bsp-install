@@ -47,7 +47,6 @@ createProject() {
     chmod a+x *.sh
     cd ../
     chown -R $USER *
-
 }
 
 start_time=`date +%s`
@@ -57,6 +56,7 @@ while true; do
     validateName
     if [[ ! -z $PROJECT_NAME ]]; then
         createProject
+        break
     else
         echo "Please enter a valid directory name"
         lineBreak
