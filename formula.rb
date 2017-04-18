@@ -1,5 +1,5 @@
 class BSPInstall < Formula
-  desc "..."
+  desc "Brightspot Server Installer"
   homepage "https://github.com/OttoHagg/brightspot-server-install"
   url #TODO needs URL of release tar.gz
   version #TODO needs release version number
