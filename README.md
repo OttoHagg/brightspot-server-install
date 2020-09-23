@@ -1,6 +1,6 @@
 # brightspot-server-install
 
-This is an [Ant](http://ant.apache.org) build script that automates the steps of the [Advanced Installation](http://docs.brightspot.com/cms/developers-guide/installation/advanced.html) of Brightspot. Brightspot requires a specific configuration of Tomcat; see [brightspot-server](https://github.com/OttoHagg/brightspot-server) for details.
+This is an [Ant](http://ant.apache.org) build script that automates the steps of the [Advanced Installation](http://docs.brightspot.com/cms/developers-guide/installation/advanced.html) of Brightspot. Brightspot requires a specific configuration of Tomcat; see the [brightspot-server](https://github.com/OttoHagg/brightspot-server) repository for the build configuration.
 
 ## Features
 * Interactive - zero configuration. The script asks you what to name your database and server directory.
@@ -10,17 +10,17 @@ This is an [Ant](http://ant.apache.org) build script that automates the steps of
 * Makes the Tomcat shell scripts executable.
 
 ## Limitations
-* It does not install MySQL (yet). See Prerequisites below.
+* It does not install MySQL. See Prerequisites below, and be sure your MySQL server is running when you execute this script.
 
 ## Prerequisites
-* Java 8 - Download and install the latest release of [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
-* Ant - Download and install [Ant 1.9.7 or higher](http://ant.apache.org/bindownload.cgi). Make sure ```ant``` is on your PATH.
-* MySQL - Download and install [MySQL 5.6.31 or higher](https://dev.mysql.com/downloads/mysql/5.6.html#downloads).
+* Java 8 - Download and install the latest release of [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html). Also tested with [Amazon Corretto 8](https://docs.aws.amazon.com/corretto/latest/corretto-8-ug/downloads-list.html).
+* Ant - Download and install [Ant 1.9.7 or higher](http://ant.apache.org/bindownload.cgi). Make sure `ant` is on your PATH.
+* MySQL - Download and install [MySQL 5.7.x GA](https://dev.mysql.com/downloads/mysql/5.7.html).
 
 ## Installation
-[Download](https://github.com/OttoHagg/brightspot-server-install/archive/master.zip) the latest version and extract contents to some directory where you want to host your server(s). For example, ```~/dev/servers```.
+[Download](https://github.com/OttoHagg/brightspot-server-install/archive/master.zip) the latest version and extract contents to some directory where you want to host your server(s). For example, `~/dev/servers`.
 
-You may delete the ```LICENSE``` and ```README.md``` files, leaving only the ```build.xml``` file.
+You may delete the `LICENSE` and `README.md` files, leaving only the `build.xml` file.
 
 ```
 ~/dev/servers/build.xml

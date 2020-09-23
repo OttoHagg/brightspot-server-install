@@ -3,7 +3,7 @@
 	<target name="init">
 		<echo message="Initializing..." />
 		<property name="template.name" value="brightspot-server" />
-		<property name="template.version" value="1.0.1" />
+		<property name="template.version" value="1.0.3" />
 		<property name="template.tag" value="https://github.com/OttoHagg/${template.name}/archive/v${template.version}.zip" />
 		<input message="What is your local MySQL user?" addproperty="database.user" defaultvalue="root" />
 		<input message="What is your local MySQL password?" addproperty="database.pass" defaultvalue="" />
@@ -39,7 +39,7 @@
 
 		<target name="database" depends="permissions">
 			<path id="database.driver.path">
-				<pathelement location="${basedir}/${server.name}/lib/mysql-connector-java-5.0.8-bin.jar" />
+				<pathelement location="${basedir}/${server.name}/lib/mysql-connector-java-5.1.49-bin.jar" />
 			</path>
 			<echo message="Setting up MySQL..." />
 			<sql driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306" userid="${database.user}" password="${database.pass}" classpathref="database.driver.path" onerror="continue">
